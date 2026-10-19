@@ -43,18 +43,29 @@ button:focus-visible{outline:3px solid #edc654;outline-offset:-3px}
 .month-heading{font-size:23px;font-weight:740;letter-spacing:-.6px;margin:28px 20px 14px;color:#111}
 .month-group{margin-bottom:18px}
 /* 폴더 입장 시 표시되는 웹페이지 안의 문자 알림 연출 */
-.sms-banner{position:fixed;z-index:1000;top:calc(12px + env(safe-area-inset-top));left:50%;width:min(calc(100% - 28px),520px);transform:translate(-50%,-160%);opacity:0;pointer-events:none;display:flex;align-items:center;gap:12px;padding:13px 15px;background:rgba(49,49,54,.97);color:white;border:1px solid rgba(255,255,255,.15);border-radius:22px;box-shadow:0 10px 30px #0004;transition:transform .5s cubic-bezier(.2,.85,.2,1),opacity .35s;}
+/* 아이폰 메시지 알림 배너를 닮은 웹페이지 내 연출 */
+.sms-banner{position:fixed;z-index:1000;top:calc(12px + env(safe-area-inset-top));left:50%;width:min(calc(100% - 28px),520px);transform:translate(-50%,-160%);opacity:0;pointer-events:none;display:flex;align-items:center;gap:15px;padding:15px 18px;background:linear-gradient(145deg,rgba(53,53,58,.98),rgba(44,44,49,.98));color:#f7f7f9;border:1px solid rgba(255,255,255,.16);border-radius:28px;box-shadow:0 9px 28px #0003,inset 0 1px 1px #ffffff18;transition:transform .5s cubic-bezier(.2,.85,.2,1),opacity .35s;min-height:102px}
 .sms-banner.show{transform:translate(-50%,0);opacity:1}
-.sms-avatar{width:44px;height:44px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;background:#96969e;color:#fff;font-size:24px;font-weight:650}
-.sms-content{min-width:0;flex:1}.sms-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:15px;font-weight:650}.sms-now{color:#c8c8cd;font-size:12px;font-weight:400}.sms-message{font-size:15px;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sms-avatar-wrap{width:64px;height:64px;position:relative;flex-shrink:0}
+.sms-avatar{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(#aaaab1,#85858e);color:#fff;font-size:39px;font-weight:450;line-height:1}
+.sms-app-icon{position:absolute;z-index:3;right:-5px;bottom:-4px;width:30px;height:30px;border-radius:9px;background:#32d45b;border:2px solid #343439;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 3px #0005;overflow:visible}
+.sms-app-icon::before{content:"";display:block;width:20px;height:15px;border-radius:50%;background:#fff}
+.sms-app-icon::after{content:"";position:absolute;width:7px;height:7px;left:6px;bottom:5px;background:#fff;transform:rotate(28deg);border-radius:0 0 1px 1px}
+.sms-app-icon svg{width:22px;height:22px;display:block}
+.sms-content{min-width:0;flex:1;align-self:center}
+.sms-top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:17px;font-weight:650;line-height:1.25}
+.sms-now{color:#b8b8c0;font-size:14px;font-weight:400;flex-shrink:0}
+.sms-message{font-size:17px;margin-top:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25}
 @media(prefers-reduced-motion:reduce){.sms-banner{transition:none}}
 </style>
 </head>
 <body>
 <div id="smsBanner" class="sms-banner" role="status" aria-live="polite" aria-hidden="true">
-  <div class="sms-avatar">민</div>
+  <div class="sms-avatar-wrap" aria-hidden="true">
+    <div class="sms-avatar">민</div>
+    <div class="sms-app-icon"></div>
+  </div>
   <div class="sms-content"><div class="sms-top"><span>민호</span><span class="sms-now">지금</span></div><div class="sms-message">양정인 짜증나</div></div>
-  <svg width="23" height="23" viewBox="0 0 24 24" fill="#4cd964" aria-hidden="true"><path d="M12 2C6.5 2 2 5.9 2 10.8c0 2.7 1.3 5 3.5 6.7L5 22l5-2.6c.7.1 1.3.2 2 .2 5.5 0 10-3.9 10-8.8S17.5 2 12 2Z"/></svg>
 </div>
 <div id="app">
 <section class="page active" id="foldersPage">
