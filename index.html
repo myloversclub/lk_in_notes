@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f2f2f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>메모</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;color:#111;--yellow:#d6a000;--bg:#f2f2f7;--line:#d1d1d6}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);-webkit-tap-highlight-color:transparent}
+button,input{font:inherit}button{border:0;background:none;cursor:pointer}#app{max-width:550px;min-height:100dvh;margin:auto;position:relative;background:var(--bg);overflow:hidden}
+.page{display:none;min-height:100dvh;padding-bottom:94px}.page.active{display:block}
+.nav{height:52px;padding:8px 17px;display:flex;align-items:center;justify-content:space-between;color:var(--yellow);font-size:17px}
+.nav button{color:var(--yellow);padding:8px 2px;display:flex;align-items:center;gap:3px}
+.nav .right{min-width:75px;justify-content:flex-end}.back svg{width:17px;height:22px}
+h1{font-size:35px;letter-spacing:-1.1px;line-height:1.2;margin:11px 20px 22px;font-weight:740}
+.search-wrap{margin:0 16px 25px;display:flex;align-items:center;gap:9px;background:#e3e3e8;color:#85858b;border-radius:11px;padding:9px 12px;height:39px}
+.search-wrap svg{flex-shrink:0}.search-wrap input{background:none;border:0;outline:0;font-size:17px;width:100%;color:#111}.search-wrap input::placeholder{color:#88888e}
+.section-label{font-size:13px;color:#81818a;margin:20px 24px 8px;font-weight:500}
+.group{margin:0 16px;background:#fff;border-radius:12px;overflow:hidden}
+.folder-row{display:flex;align-items:center;min-height:57px;width:100%;padding:0 15px;gap:12px;text-align:left;color:#111;position:relative}
+.folder-row:not(:last-child):after,.note-row:not(:last-child):after{content:"";position:absolute;bottom:0;left:52px;right:0;height:.5px;background:var(--line)}
+.folder-icon{color:var(--yellow);width:25px;height:25px;flex-shrink:0}
+.folder-name{font-size:17px;font-weight:500;flex:1}.count{color:#8e8e93;font-size:16px}.chev{color:#c7c7cc;font-size:22px;margin-left:4px}
+.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,550px);height:calc(63px + env(safe-area-inset-bottom));padding:10px 24px calc(12px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:center;border-top:.5px solid #c8c8ce;background:#f8f8fbeb;backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);color:var(--yellow)}
+.bottom .muted{font-size:12px;color:#8e8e93;text-align:center;flex:1}.bottom svg{width:25px;height:25px}
+.note-row{position:relative;display:block;text-align:left;width:100%;padding:12px 16px 13px;min-height:79px}
+.note-row h2{font-size:17px;letter-spacing:-.25px;margin:0 0 5px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note-row p{font-size:14px;color:#85858a;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note-row time{color:#85858a;margin-right:7px}
+.empty{padding:50px 20px;text-align:center;color:#8e8e93;font-size:15px}
+#detail{background:#fff}.detail-content{padding:15px 24px 80px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:17px;line-height:1.48;min-height:60vh}.detail-content .detail-title{font-size:25px;font-weight:730;line-height:1.24;margin:0 0 8px;white-space:pre-wrap}.detail-content .detail-date{font-size:13px;color:#8e8e93;margin-bottom:22px}
+#detail .bottom{background:#fff}.detail-content .body{white-space:pre-wrap}
+button:focus-visible{outline:3px solid #edc654;outline-offset:-3px}
+@media(display-mode:standalone){.nav{margin-top:env(safe-area-inset-top)}}
+</style>
+</head>
+<body>
+<div id="app">
+<section class="page active" id="foldersPage">
+  <div class="nav"><span></span><span style="font-size:17px;color:var(--yellow)">읽기 전용</span></div>
+  <h1>폴더</h1>
+  <div class="search-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10.5" cy="10.5" r="7.2"/><path d="m16 16 5 5"/></svg><input id="folderSearch" placeholder="검색" aria-label="폴더와 메모 검색"></div>
+  <div class="section-label">iCloud</div><div class="group" id="foldersList"></div>
+  <div class="bottom"><span style="font-size:14px;color:#8e8e93">iCloud</span><span class="muted">작성자만 메모를 수정할 수 있습니다</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v13H4zM2 5h20M9 11h6"/></svg></div>
+</section>
+<section class="page" id="listPage">
+  <div class="nav"><button class="back" onclick="go('foldersPage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m15 3-9 9 9 9"/></svg>폴더</button><button class="right" aria-label="읽기 전용">···</button></div>
+  <h1 id="folderTitle">메모</h1>
+  <div class="search-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10.5" cy="10.5" r="7.2"/><path d="m16 16 5 5"/></svg><input id="noteSearch" placeholder="검색" aria-label="메모 검색"></div>
+  <div class="group" id="notesList"></div>
+  <div class="bottom"><span></span><span class="muted" id="noteCount"></span><span style="font-size:14px;color:#8e8e93">보기 전용</span></div>
+</section>
+<section class="page" id="detail">
+  <div class="nav"><button class="back" onclick="go('listPage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m15 3-9 9 9 9"/></svg>메모</button><span style="font-size:15px;color:#8e8e93">읽기 전용</span></div>
+  <article class="detail-content"><h2 class="detail-title" id="detailTitle"></h2><div class="detail-date" id="detailDate"></div><div class="body" id="detailBody"></div></article>
+  <div class="bottom"><span></span><span class="muted">이 메모는 수정할 수 없습니다</span><span></span></div>
+</section>
+</div>
+<script>
+/*
+  ★ 작성자 전용 편집 영역 ★
+  이 아래 DATA의 폴더 이름과 메모 제목/날짜/내용을 수정한 뒤
+  GitHub에서 index.html을 저장(Commit)하면 모든 방문자에게 반영됩니다.
+  방문자는 웹페이지에서 메모를 추가·수정·삭제할 수 없습니다.
+  예시 메모는 자유롭게 지우고 바꾸세요.
+*/
+const DATA = [
+  {folder:"메모", notes:[
+    {title:"첫 번째 메모",date:"2026. 10. 19.",body:"안녕하세요!\n\n이곳에는 작성자가 공개한 메모가 표시됩니다.\n\n이 내용은 index.html 파일의 DATA 부분에서 수정할 수 있어요."},
+    {title:"공지",date:"2026. 10. 19.",body:"이 페이지는 읽기 전용입니다.\n방문자는 메모를 읽을 수 있지만 내용을 바꿀 수 없습니다."}
+  ]},
+  {folder:"기록",notes:[
+    {title:"기록의 시작",date:"2026. 10. 19.",body:"여기에 원하는 기록을 적어 주세요."}
+  ]}
+];
+let activeFolder=0;
+const $=id=>document.getElementById(id);
+function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
+function go(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));window.scrollTo(0,0)}
+const folderSvg='<svg class="folder-icon" viewBox="0 0 24 24" fill="#e5ad18"><path d="M2 6.5A2.5 2.5 0 0 1 4.5 4h5l2.2 2.4H20A2 2 0 0 1 22 8.5v10A2.5 2.5 0 0 1 19.5 21h-15A2.5 2.5 0 0 1 2 18.5z"/></svg>';
+function renderFolders(){
+ const q=$('folderSearch').value.trim().toLowerCase(),root=$('foldersList');root.replaceChildren();let found=0;
+ DATA.forEach((f,i)=>{if(q&&!f.folder.toLowerCase().includes(q)&&!f.notes.some(n=>(n.title+' '+n.body).toLowerCase().includes(q)))return;found++;
+ const b=el('button','folder-row');b.innerHTML=folderSvg;
+ b.append(el('span','folder-name',f.folder),el('span','count',String(f.notes.length)),el('span','chev','›'));
+ b.onclick=()=>openFolder(i);root.append(b)});
+ if(!found)root.append(el('div','empty','검색 결과가 없습니다.'));
+}
+function openFolder(i){activeFolder=i;$('folderTitle').textContent=DATA[i].folder;$('noteSearch').value='';renderNotes();go('listPage')}
+function renderNotes(){
+ const f=DATA[activeFolder],q=$('noteSearch').value.trim().toLowerCase(),root=$('notesList');root.replaceChildren();
+ const matches=f.notes.map((n,i)=>({...n,index:i})).filter(n=>(n.title+' '+n.body).toLowerCase().includes(q));
+ matches.forEach(n=>{const b=el('button','note-row');b.append(el('h2','',n.title));
+ const p=el('p');p.append(el('time','',n.date),document.createTextNode(n.body.replace(/\s+/g,' ').slice(0,65)));b.append(p);
+ b.onclick=()=>openNote(n.index);root.append(b)});
+ if(!matches.length)root.append(el('div','empty','메모가 없습니다.'));
+ $('noteCount').textContent=f.notes.length+'개의 메모';
+}
+function openNote(i){const n=DATA[activeFolder].notes[i];$('detailTitle').textContent=n.title;$('detailDate').textContent=n.date;$('detailBody').textContent=n.body;go('detail')}
+$('folderSearch').addEventListener('input',renderFolders);
+$('noteSearch').addEventListener('input',renderNotes);
+renderFolders();
+</script>
+</body></html>
