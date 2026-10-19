@@ -141,7 +141,7 @@ function showSmsBanner(){
    smsHideTimer=setTimeout(hideSmsBanner,4000);
  }));
 }
-function openFolder(i){activeFolder=i;$('folderTitle').textContent=DATA[i].folder;$('noteSearch').value='';renderNotes();go('listPage');if(DATA[i].folder==='민호 일정')showSmsBanner();else hideSmsBanner()}
+function openFolder(i){activeFolder=i;$('folderTitle').textContent=DATA[i].folder;$('noteSearch').value='';renderNotes();go('listPage');if(DATA[i].folder==='민호 주요 일정')showSmsBanner();else hideSmsBanner()}
 // date 속성의 연도·월을 읽어 자동으로 묶습니다. 날짜가 없거나 형식이 다르면 '날짜 없음'으로 표시합니다.
 function noteMonth(date){
  const m=String(date||'').match(/^\s*(\d{4})\s*[.\-/]\s*(\d{1,2})(?=\s*[.\-/]|\s|$)/);
