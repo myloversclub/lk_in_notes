@@ -40,23 +40,23 @@ button:focus-visible{outline:3px solid #edc654;outline-offset:-3px}
 <body>
 <div id="app">
 <section class="page active" id="foldersPage">
-  <div class="nav"><span></span><span style="font-size:17px;color:var(--yellow)">읽기 전용</span></div>
+  <div class="nav"><span></span><span></span></div>
   <h1>폴더</h1>
   <div class="search-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10.5" cy="10.5" r="7.2"/><path d="m16 16 5 5"/></svg><input id="folderSearch" placeholder="검색" aria-label="폴더와 메모 검색"></div>
   <div class="section-label">iCloud</div><div class="group" id="foldersList"></div>
-  <div class="bottom"><span style="font-size:14px;color:#8e8e93">iCloud</span><span class="muted">작성자만 메모를 수정할 수 있습니다</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v13H4zM2 5h20M9 11h6"/></svg></div>
+  <div class="bottom"><span style="font-size:14px;color:#8e8e93">iCloud</span><span class="muted"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v13H4zM2 5h20M9 11h6"/></svg></div>
 </section>
 <section class="page" id="listPage">
   <div class="nav"><button class="back" onclick="go('foldersPage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m15 3-9 9 9 9"/></svg>폴더</button><button class="right" aria-label="읽기 전용">···</button></div>
   <h1 id="folderTitle">메모</h1>
   <div class="search-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10.5" cy="10.5" r="7.2"/><path d="m16 16 5 5"/></svg><input id="noteSearch" placeholder="검색" aria-label="메모 검색"></div>
   <div class="group" id="notesList"></div>
-  <div class="bottom"><span></span><span class="muted" id="noteCount"></span><span style="font-size:14px;color:#8e8e93">보기 전용</span></div>
+  <div class="bottom"><span></span><span class="muted" id="noteCount"></span><span></span></div>
 </section>
 <section class="page" id="detail">
-  <div class="nav"><button class="back" onclick="go('listPage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m15 3-9 9 9 9"/></svg>메모</button><span style="font-size:15px;color:#8e8e93">읽기 전용</span></div>
+  <div class="nav"><button class="back" onclick="go('listPage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m15 3-9 9 9 9"/></svg>메모</button><span></span></div>
   <article class="detail-content"><h2 class="detail-title" id="detailTitle"></h2><div class="detail-date" id="detailDate"></div><div class="body" id="detailBody"></div></article>
-  <div class="bottom"><span></span><span class="muted">이 메모는 수정할 수 없습니다</span><span></span></div>
+  <div class="bottom"><span></span><span class="muted"></span><span></span></div>
 </section>
 </div>
 <script>
