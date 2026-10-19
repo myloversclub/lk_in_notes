@@ -38,9 +38,10 @@ h1{font-size:35px;letter-spacing:-1.1px;line-height:1.2;margin:11px 20px 22px;fo
 .detail-content .body .photo-error{color:#8e8e93;font-size:13px;margin:12px 0}.detail-content .body{white-space:pre-wrap}
 button:focus-visible{outline:3px solid #edc654;outline-offset:-3px}
 @media(display-mode:standalone){.nav{margin-top:env(safe-area-inset-top)}}
-.note-row h2 {
-  color: #111111 !important;
-}
+.note-row h2 {color:#111111 !important}
+/* 월별 메모 그룹 */
+.month-heading{font-size:23px;font-weight:740;letter-spacing:-.6px;margin:28px 20px 14px;color:#111}
+.month-group{margin-bottom:18px}
 </style>
 </head>
 <body>
@@ -56,7 +57,7 @@ button:focus-visible{outline:3px solid #edc654;outline-offset:-3px}
   <div class="nav"><button class="back" onclick="go('foldersPage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m15 3-9 9 9 9"/></svg>폴더</button><button class="right" aria-label="읽기 전용">···</button></div>
   <h1 id="folderTitle">메모</h1>
   <div class="search-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10.5" cy="10.5" r="7.2"/><path d="m16 16 5 5"/></svg><input id="noteSearch" placeholder="검색" aria-label="메모 검색"></div>
-  <div class="group" id="notesList"></div>
+  <div id="notesList"></div>
   <div class="bottom"><span></span><span class="muted" id="noteCount"></span><span></span></div>
 </section>
 <section class="page" id="detail">
@@ -66,13 +67,7 @@ button:focus-visible{outline:3px solid #edc654;outline-offset:-3px}
 </section>
 </div>
 <script>
-/*
-  ★ 작성자 전용 편집 영역 ★
-  이 아래 DATA의 폴더 이름과 메모 제목/날짜/내용을 수정한 뒤
-  GitHub에서 index.html을 저장(Commit)하면 모든 방문자에게 반영됩니다.
-  방문자는 웹페이지에서 메모를 추가·수정·삭제할 수 없습니다.
-  예시 메모는 자유롭게 지우고 바꾸세요.
-*/
+/* ★ 작성자 전용 편집 영역 ★ */
 const DATA = [
   {folder:"민호 일정", notes:[
     {title:"10/14",date:"2026. 10. 5.",body:"이민호 오전 외부 업무로 대표실 부재\n14:00- 월 정기 검토(퇴근 ㅈㄴ 늦을 것으로 예상"},
@@ -103,17 +98,31 @@ function renderFolders(){
  if(!found)root.append(el('div','empty','검색 결과가 없습니다.'));
 }
 function openFolder(i){activeFolder=i;$('folderTitle').textContent=DATA[i].folder;$('noteSearch').value='';renderNotes();go('listPage')}
+// date 속성의 연도·월을 읽어 자동으로 묶습니다. 날짜가 없거나 형식이 다르면 '날짜 없음'으로 표시합니다.
+function noteMonth(date){
+ const m=String(date||'').match(/^\s*(\d{4})\s*[.\-/]\s*(\d{1,2})(?=\s*[.\-/]|\s|$)/);
+ if(!m)return {key:'unknown',label:'날짜 없음',order:-1};
+ const year=Number(m[1]),month=Number(m[2]);
+ if(month<1||month>12)return {key:'unknown',label:'날짜 없음',order:-1};
+ return {key:year+'-'+String(month).padStart(2,'0'),label:year+'년 '+month+'월',order:year*12+month};
+}
 function renderNotes(){
  const f=DATA[activeFolder],q=$('noteSearch').value.trim().toLowerCase(),root=$('notesList');root.replaceChildren();
  const matches=f.notes.map((n,i)=>({...n,index:i})).filter(n=>(n.title+' '+n.body).toLowerCase().includes(q));
- matches.forEach(n=>{const b=el('button','note-row');b.append(el('h2','',n.title));
- const p=el('p');p.append(el('time','',n.date),document.createTextNode(n.body.replace(/\s+/g,' ').slice(0,65)));b.append(p);
- b.onclick=()=>openNote(n.index);root.append(b)});
+ const months=new Map();
+ matches.forEach(n=>{const m=noteMonth(n.date);if(!months.has(m.key))months.set(m.key,{...m,notes:[]});months.get(m.key).notes.push(n)});
+ [...months.values()].sort((a,b)=>b.order-a.order).forEach(m=>{
+   root.append(el('h2','month-heading',m.label));
+   const group=el('div','group month-group');
+   m.notes.forEach(n=>{const b=el('button','note-row');b.append(el('h2','',n.title));
+     const p=el('p');p.append(el('time','',n.date),document.createTextNode(n.body.replace(/\[\[사진:[^\]\r\n]+\]\]/g,'사진 ').replace(/\s+/g,' ').slice(0,65)));b.append(p);
+     b.onclick=()=>openNote(n.index);group.append(b)});
+   root.append(group);
+ });
  if(!matches.length)root.append(el('div','empty','메모가 없습니다.'));
  $('noteCount').textContent=f.notes.length+'개의 메모';
 }
 // 본문에 [[사진:photo1.jpg]]를 적으면 그 위치에 이미지를 표시합니다.
-// 사진은 index.html과 같은 저장소 폴더에 업로드해 주세요.
 function renderBody(body){
  const root=$('detailBody');root.replaceChildren();
  const pattern=/\[\[사진:([^\]\r\n]+)\]\]/g;
