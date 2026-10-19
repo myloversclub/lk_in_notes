@@ -55,6 +55,10 @@ button:focus-visible{outline:3px solid #edc654;outline-offset:-3px}
 .sms-now{color:#b8b8c0;font-size:14px;font-weight:400;flex-shrink:0}
 .sms-message{font-size:19px;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25}
 @media(prefers-reduced-motion:reduce){.sms-banner{transition:none}}
+.note-row:not(:last-child)::after {
+  left: 16px !important;
+  right: 0 !important;
+}
 </style>
 </head>
 <body>
