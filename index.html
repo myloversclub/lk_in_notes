@@ -1,13 +1,4 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f2f2f7">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>메모</title>
-<style>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f2f2f7"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><title>메모</title><style>
 :root{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;color:#111;--yellow:#d6a000;--bg:#f2f2f7;--line:#d1d1d6}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);-webkit-tap-highlight-color:transparent}
 button,input{font:inherit}button{border:0;background:none;cursor:pointer}#app{max-width:550px;min-height:100dvh;margin:auto;position:relative;background:var(--bg);overflow:hidden}
@@ -39,11 +30,8 @@ h1{font-size:35px;letter-spacing:-1.1px;line-height:1.2;margin:11px 20px 22px;fo
 button:focus-visible{outline:3px solid #edc654;outline-offset:-3px}
 @media(display-mode:standalone){.nav{margin-top:env(safe-area-inset-top)}}
 .note-row h2 {color:#111111 !important}
-/* 월별 메모 그룹 */
 .month-heading{font-size:23px;font-weight:740;letter-spacing:-.6px;margin:28px 20px 14px;color:#111}
 .month-group{margin-bottom:18px}
-/* 폴더 입장 시 표시되는 웹페이지 안의 문자 알림 연출 */
-/* 아이폰 메시지 알림 배너를 닮은 웹페이지 내 연출 */
 .sms-banner{position:fixed;z-index:1000;top:calc(12px + env(safe-area-inset-top));left:50%;width:min(calc(100% - 28px),520px);transform:translate(-50%,-160%);opacity:0;pointer-events:none;display:flex;align-items:center;gap:14px;padding:11px 17px;background:linear-gradient(145deg,rgba(53,53,58,.98),rgba(44,44,49,.98));color:#f7f7f9;border:1px solid rgba(255,255,255,.16);border-radius:27px;box-shadow:0 9px 28px #0003,inset 0 1px 1px #ffffff18;transition:transform .5s cubic-bezier(.2,.85,.2,1),opacity .35s;min-height:89px}
 .sms-banner.show{transform:translate(-50%,0);opacity:1}
 .sms-avatar-wrap{width:58px;height:58px;position:relative;flex-shrink:0}
@@ -55,64 +43,179 @@ button:focus-visible{outline:3px solid #edc654;outline-offset:-3px}
 .sms-now{color:#b8b8c0;font-size:14px;font-weight:400;flex-shrink:0}
 .sms-message{font-size:19px;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.25}
 @media(prefers-reduced-motion:reduce){.sms-banner{transition:none}}
-.note-row:not(:last-child)::after {
-  left: 16px !important;
-  right: 16px !important;
-}
-</style>
-</head>
-<body>
-<div id="smsBanner" class="sms-banner" role="status" aria-live="polite" aria-hidden="true">
-  <div class="sms-avatar-wrap" aria-hidden="true">
-    <div class="sms-avatar">민</div>
-    <div class="sms-app-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 3.3c-5.4 0-9.5 3.45-9.5 7.9 0 2.45 1.25 4.4 3.35 5.9l-.6 3.35 3.65-1.8c.97.3 2.03.45 3.1.45 5.4 0 9.5-3.45 9.5-7.9s-4.1-7.9-9.5-7.9Z"/></svg></div>
-  </div>
-  <div class="sms-content"><div class="sms-top"><span>민호</span><span class="sms-now">지금</span></div><div class="sms-message">양정인 짜증나</div></div>
-</div>
-<div id="app">
-<section class="page active" id="foldersPage">
-  <div class="nav"><span></span><span></span></div>
-  <h1>폴더</h1>
-  <div class="search-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10.5" cy="10.5" r="7.2"/><path d="m16 16 5 5"/></svg><input id="folderSearch" placeholder="검색" aria-label="폴더와 메모 검색"></div>
-  <div class="section-label">iCloud</div><div class="group" id="foldersList"></div>
-  <div class="bottom"><span style="font-size:14px;color:#8e8e93">iCloud</span><span class="muted"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v13H4zM2 5h20M9 11h6"/></svg></div>
-</section>
-<section class="page" id="listPage">
-  <div class="nav"><button class="back" onclick="go('foldersPage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m15 3-9 9 9 9"/></svg>폴더</button><button class="right" aria-label="읽기 전용">···</button></div>
-  <h1 id="folderTitle">메모</h1>
-  <div class="search-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10.5" cy="10.5" r="7.2"/><path d="m16 16 5 5"/></svg><input id="noteSearch" placeholder="검색" aria-label="메모 검색"></div>
-  <div id="notesList"></div>
-  <div class="bottom"><span></span><span class="muted" id="noteCount"></span><span></span></div>
-</section>
-<section class="page" id="detail">
-  <div class="nav"><button class="back" onclick="go('listPage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m15 3-9 9 9 9"/></svg>메모</button><span></span></div>
-  <article class="detail-content"><h2 class="detail-title" id="detailTitle"></h2><div class="detail-date" id="detailDate"></div><div class="body" id="detailBody"></div></article>
-  <div class="bottom"><span></span><span class="muted"></span><span></span></div>
-</section>
-</div>
-<script>
+.note-row:not(:last-child)::after {left:16px !important;right:16px !important}
+</style></head><body>
+<div id="smsBanner" class="sms-banner" role="status" aria-live="polite" aria-hidden="true"><div class="sms-avatar-wrap" aria-hidden="true"><div class="sms-avatar">민</div><div class="sms-app-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="#fff" d="M12 3.3c-5.4 0-9.5 3.45-9.5 7.9 0 2.45 1.25 4.4 3.35 5.9l-.6 3.35 3.65-1.8c.97.3 2.03.45 3.1.45 5.4 0 9.5-3.45 9.5-7.9s-4.1-7.9-9.5-7.9Z"/></svg></div></div><div class="sms-content"><div class="sms-top"><span>민호</span><span class="sms-now">지금</span></div><div class="sms-message">양정인 짜증나</div></div></div>
+<div id="app"><section class="page active" id="foldersPage"><div class="nav"><span></span><span></span></div><h1>폴더</h1><div class="search-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10.5" cy="10.5" r="7.2"/><path d="m16 16 5 5"/></svg><input id="folderSearch" placeholder="검색" aria-label="폴더와 메모 검색"></div><div class="section-label">iCloud</div><div class="group" id="foldersList"></div><div class="bottom"><span style="font-size:14px;color:#8e8e93">iCloud</span><span class="muted"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v13H4zM2 5h20M9 11h6"/></svg></div></section>
+<section class="page" id="listPage"><div class="nav"><button class="back" onclick="go('foldersPage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m15 3-9 9 9 9"/></svg>폴더</button><button class="right" aria-label="읽기 전용">···</button></div><h1 id="folderTitle">메모</h1><div class="search-wrap"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10.5" cy="10.5" r="7.2"/><path d="m16 16 5 5"/></svg><input id="noteSearch" placeholder="검색" aria-label="메모 검색"></div><div id="notesList"></div><div class="bottom"><span></span><span class="muted" id="noteCount"></span><span></span></div></section>
+<section class="page" id="detail"><div class="nav"><button class="back" onclick="go('listPage')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.7"><path d="m15 3-9 9 9 9"/></svg>메모</button><span></span></div><article class="detail-content"><h2 class="detail-title" id="detailTitle"></h2><div class="detail-date" id="detailDate"></div><div class="body" id="detailBody"></div></article><div class="bottom"><span></span><span class="muted"></span><span></span></div></section></div><script>
 /* ★ 작성자 전용 편집 영역 ★ */
 const DATA = [
-  {folder:"민호 주요 일정", notes:[
-    {title:"10/25",date:"2026. 10. 11.",body:"10:00-11:30 부서 별 정례 회의\n11:30-12:30 법무 담당자 미팅(신규 입사자 소개도 같이 할듯)\n12:30-13:00 점심 데이트(원래 안 하려고 했는데 안 하면 진짜 삐질 것 같음)\n14:00-15:00 한성 계약 연장 관련 미팅\n15:30-16:30 서창빈 이사 면담"},
-    {title:"10/22",date:"2026. 10. 9.",body:"09:30-11:00 화정그룹 최진호 사장님 미팅(미팅 준비 확실하게)\n11:10-12:00 기획팀 자료 검토\n12:00-13:30 점심 약속(대표님, 나, 서창빈 이사) \n13:40- 대표님 개인 업무(사무실에만 계실 예정으로, 필요 시 호출) \n->16시 쯤 커피 전달"},
-    {title:"10/14",date:"2026. 10. 5.",body:"이민호 오전 외부 업무로 대표실 부재\n14:00- 월 정기 검토(퇴근 ㅈㄴ 늦을 것으로 예상) "},
-    {title:"10/11",date:"2026. 10. 5.",body:"09:00-11:30 경영진 주간 회의\n11:40-13:00 점심 데이트(12:00 블루문 예약)\n13:30-15:00 법무팀 계약 검토 보고\n15:00-16:00 신규 사업 미팅\n16:00-17:30 보고서 및 계약서 결재"},
-    {title:"10/8",date:"2026. 10. 1.",body:"12:00-13:30 파트너사 대표 오찬\n14:00-14:30 비서 실장(나) 개별 면담"},
-    {title:"10/7",date:"2026. 10. 1.",body:"13:00-14:00 재무팀 개별 보고"},
-  ]},
-  {folder:"이민호 사용법",notes:[
-    {title:"그냥",date:"2026. 5. 1.",body:"• 고양이를 키움\n-> 순이, 둥이, 도리 총 세 마리\n• 외동(이라 다행인 듯하다)\n• 남들한테는 엄청 유능하고 일 잘하는 짱멋진 대표 이미지인데 나랑 둘만 있으면 어리광 잘 피움\n-> 약간 다행임 나만 볼 수 있어서"},
-    {title:"출근 및 일과",date:"2026. 4. 13.",body:"• 출근 시간 대체로 오전 9시 이전\n-> 근데 늦게 출근하고 싶은 날엔 10시에도 함(완전 제 멋대로)\n• 월요일에는 대체로 사내 회의 잡는 거 안 좋아함(거래처 회의는 괜찮음) \n-> 다만 오전 보고의 경우 짧고 간결하게 전달\n• 오후 3-4시 정도 집중력 떨어질 때 커피 또 마심\n-> 하마 같음\n• 퇴근 직전 익일 일정 재확인"},
-    {title:"음료 및 식사",date:"2026. 4. 13.",body:"• 아침 - 아침은 거의 안 드시고 오셔서 아이스 아메리카노+@\n-> @는 너무 기름진 것 제외... 빵을 좋아하는 것 같음 아니면 핑거 푸드 할만한 거 뭐든 괜찮은 것 같다(커피만 마시면 안됨) \n• 점심은 보통 한식 선호, 역시 너무 기름진 음식은 피해야 함\n• 단 걸 안 좋아하심\n-> 근데... 사다주면 잘 먹음(푸딩이나 에그타르트 같은 거 환장함) \n• 매운 음식 잘 드시는 것 같은데 먼저 찾지는 않음"},
-  ]},
-  {folder:"해야할 일",notes:[
-    {title:"20일 장 보기",date:"2026. 10. 16",body:"밀가루?\n박력분?\n딸기\n오렌지\n초콜릿\n생크림\n휘핑크림\n젤리(이건 내가 먹을거) "}
-  ]},
-  {folder:"민호 왔다 감",notes:[
-    {title:"양정인 너는 도리 없지 ㅋ",date:"2026. 10. 01.",body:"[[사진:lk2.JPG]]\n돼지 보고싶네"},
-    {title:"양정인 바보",date:"2026. 9. 24.",body:"[[사진:lk1.JPG]]\n오늘도 폰 뺏음 ㅋㅋ"},
-  ]}
+  {
+    "folder": "민호 주요 일정",
+    "notes": [
+      {
+        "title": "10/25",
+        "date": "2026. 10. 11.",
+        "body": "10:00-11:30 부서 별 정례 회의\n11:30-12:30 법무 담당자 미팅(신규 입사자 소개도 같이 할듯)\n12:30-13:00 점심 데이트(원래 안 하려고 했는데 안 하면 진짜 삐질 것 같음)\n14:00-15:00 한성 계약 연장 관련 미팅\n15:30-16:30 서창빈 이사 면담"
+      },
+      {
+        "title": "10/22",
+        "date": "2026. 10. 9.",
+        "body": "09:30-11:00 화정그룹 최진호 사장님 미팅(미팅 준비 확실하게)\n11:10-12:00 기획팀 자료 검토\n12:00-13:30 점심 약속(대표님, 나, 서창빈 이사) \n13:40- 대표님 개인 업무(사무실에만 계실 예정으로, 필요 시 호출) \n->16시 쯤 커피 전달"
+      },
+      {
+        "title": "10/14",
+        "date": "2026. 10. 5.",
+        "body": "이민호 오전 외부 업무로 대표실 부재\n14:00- 월 정기 검토(퇴근 ㅈㄴ 늦을 것으로 예상) "
+      },
+      {
+        "title": "10/11",
+        "date": "2026. 10. 5.",
+        "body": "09:00-11:30 경영진 주간 회의\n11:40-13:00 점심 데이트(12:00 블루문 예약)\n13:30-15:00 법무팀 계약 검토 보고\n15:00-16:00 신규 사업 미팅\n16:00-17:30 보고서 및 계약서 결재"
+      },
+      {
+        "title": "10/8",
+        "date": "2026. 10. 1.",
+        "body": "12:00-13:30 파트너사 대표 오찬\n14:00-14:30 비서 실장(나) 개별 면담"
+      },
+      {
+        "title": "10/7",
+        "date": "2026. 10. 1.",
+        "body": "13:00-14:00 재무팀 개별 보고"
+      },
+      {
+        "title": "9/24",
+        "date": "2026. 9. 21.",
+        "body": "09:30-10:30 사업부 실적 보고\n11:00-12:00 외부 자문 미팅\n14:00- 신규 프로젝트 제안서 검토\n-> 오후 일정 중간에 커피 전달"
+      },
+      {
+        "title": "9/10",
+        "date": "2026. 9. 7.",
+        "body": "10:00-11:00 임원 정례 회의\n12:30- 거래처 오찬\n15:00-16:00 서창빈 이사 보고\n저녁 약속 없음(확인 완료)"
+      },
+      {
+        "title": "8/19",
+        "date": "2026. 8. 17.",
+        "body": "09:00-10:00 주간 보고\n11:30-13:00 외부 미팅 및 점심\n14:30-15:30 계약서 최종 검토\n-> 오전 이동 차량 확인"
+      },
+      {
+        "title": "7/28",
+        "date": "2026. 7. 24.",
+        "body": "10:00-11:00 하반기 예산 관련 보고\n13:00-14:00 인사팀 면담\n15:30- 부서장 개별 보고\n대표님 오후에 외근 잡지 말 것"
+      },
+      {
+        "title": "6/16",
+        "date": "2026. 6. 12.",
+        "body": "09:30-10:30 기획안 검토\n11:00-12:00 협력사 화상 미팅\n14:00-15:00 법무팀 보고\n회의실 냉방 너무 세지 않게"
+      },
+      {
+        "title": "5/8",
+        "date": "2026. 5. 6.",
+        "body": "10:00-11:30 분기 실적 점검\n12:00-13:00 서 이사님과 점심\n14:00-16:00 내부 결재 및 자료 검토"
+      },
+      {
+        "title": "3/26",
+        "date": "2026. 3. 23.",
+        "body": "09:00-10:00 대표실 주간 보고\n11:00- 외부 미팅\n14:00-15:00 신규 거래처 관련 자료 검토\n-> 명함, 회의 자료 챙기기"
+      }
+    ]
+  },
+  {
+    "folder": "이민호 사용법",
+    "notes": [
+      {
+        "title": "그냥",
+        "date": "2026. 5. 1.",
+        "body": "• 고양이를 키움\n-> 순이, 둥이, 도리 총 세 마리\n• 외동(이라 다행인 듯하다)\n• 남들한테는 엄청 유능하고 일 잘하는 짱멋진 대표 이미지인데 나랑 둘만 있으면 어리광 잘 피움\n-> 약간 다행임 나만 볼 수 있어서"
+      },
+      {
+        "title": "출근 및 일과",
+        "date": "2026. 4. 13.",
+        "body": "• 출근 시간 대체로 오전 9시 이전\n-> 근데 늦게 출근하고 싶은 날엔 10시에도 함(완전 제 멋대로)\n• 월요일에는 대체로 사내 회의 잡는 거 안 좋아함(거래처 회의는 괜찮음) \n-> 다만 오전 보고의 경우 짧고 간결하게 전달\n• 오후 3-4시 정도 집중력 떨어질 때 커피 또 마심\n-> 하마 같음\n• 퇴근 직전 익일 일정 재확인"
+      },
+      {
+        "title": "음료 및 식사",
+        "date": "2026. 4. 13.",
+        "body": "• 아침 - 아침은 거의 안 드시고 오셔서 아이스 아메리카노+@\n-> @는 너무 기름진 것 제외... 빵을 좋아하는 것 같음 아니면 핑거 푸드 할만한 거 뭐든 괜찮은 것 같다(커피만 마시면 안됨) \n• 점심은 보통 한식 선호, 역시 너무 기름진 음식은 피해야 함\n• 단 걸 안 좋아하심\n-> 근데... 사다주면 잘 먹음(푸딩이나 에그타르트 같은 거 환장함) \n• 매운 음식 잘 드시는 것 같은데 먼저 찾지는 않음"
+      },
+      {
+        "title": "회의 전후",
+        "date": "2026. 3. 19.",
+        "body": "• 회의 시작 10분 전 자료 미리 올려둘 것\n• 보고서는 결론부터 말씀드리는 게 나음\n-> 배경 설명 길어지면 표정부터 굳음\n• 일정 사이 최소 15분 비워두기\n• 회의 끝나고 바로 다음 회의 잡지 말기(특히 월요일)"
+      },
+      {
+        "title": "외근 나갈 때",
+        "date": "2026. 4. 2.",
+        "body": "• 차량 도착 시간 전날 재확인\n• 이동 중 검토할 자료는 종이보다 태블릿 선호\n• 외부 일정 길면 생수 꼭 챙기기\n• 비 오는 날 우산 직접 안 챙김\n-> 내가 두 개 들고 나가야 함..."
+      },
+      {
+        "title": "대표실",
+        "date": "2026. 5. 18.",
+        "body": "• 책상 위 서류 위치 바뀌는 거 싫어함\n• 오전에는 블라인드 반쯤 올려두기\n• 실내 온도 너무 낮으면 금방 추워함\n-> 근데 본인은 안 춥다고 함\n• 손님 오기 전 물컵 먼저 준비\n• 책상에 둔 포스트잇 함부로 버리지 말 것"
+      },
+      {
+        "title": "기분 안 좋을 때",
+        "date": "2026. 7. 9.",
+        "body": "• 말수가 줄고 대답이 짧아짐\n• 일 때문이면 혼자 정리할 시간 드리는 게 나음\n• 점심 거르기 쉬우니까 간단한 거라도 챙기기\n• 괜히 괜찮냐고 세 번 물어보지 말기\n-> 두 번째부터 나만 쳐다봄. 무섭지는 않음... 아마"
+      },
+      {
+        "title": "기타 주의사항",
+        "date": "2026. 9. 15.",
+        "body": "• 펜은 검정색만 주로 사용\n• 새벽에 보낸 메시지는 출근 후 확인해도 된다고 하심\n-> 근데 답장 안 하면 또 물어봄. 뭐 어쩌라는 건지\n• 고양이 사진 보여주면 표정 풀림\n• 본인 생일은 별로 신경 안 쓰는 척함\n-> 올해는 그냥 넘어가지 말아야지"
+      }
+    ]
+  },
+  {
+    "folder": "해야할 일",
+    "notes": [
+      {
+        "title": "20일 장 보기",
+        "date": "2026. 10. 16",
+        "body": "밀가루?\n박력분?\n딸기\n오렌지\n초콜릿\n생크림\n휘핑크림\n젤리(이건 내가 먹을거) "
+      },
+      {
+        "title": "케이크 연습",
+        "date": "2026. 10. 17.",
+        "body": "• 작은 틀 하나 사기\n• 생크림 너무 달지 않게\n• 오븐 예열 시간 확인\n• 망하면 그냥 가게에서 살까...\n아니 그래도 직접 해보자"
+      },
+      {
+        "title": "퇴근하고",
+        "date": "2026. 10. 13.",
+        "body": "세탁소 들르기\n대표님 맡긴 재킷 찾기\n우유 사기\n휴대폰 충전기 새로 사야 함\n집에 가서 고양이 사진 보내달라고 하기"
+      },
+      {
+        "title": "주말에 할 것",
+        "date": "2026. 9. 26.",
+        "body": "이불 빨래\n냉장고 정리\n도리 간식 주문(순이 둥이 것도 같이)\n영수증 정리\n제발 일찍 자기"
+      },
+      {
+        "title": "사야 하는 거",
+        "date": "2026. 8. 12.",
+        "body": "볼펜 검정색\n포스트잇\n립밤\n휴대용 우산 하나 더\n대표님 우산 또 없어짐..."
+      },
+      {
+        "title": "집에 가는 길",
+        "date": "2026. 6. 25.",
+        "body": "편의점 택배 보내기\n식빵\n달걀\n쓰레기봉투\n엄마한테 전화하기"
+      }
+    ]
+  },
+  {
+    "folder": "민호 왔다 감",
+    "notes": [
+      {
+        "title": "양정인 너는 도리 없지 ㅋ",
+        "date": "2026. 10. 01.",
+        "body": "[[사진:lk2.JPG]]\n돼지 보고싶네"
+      },
+      {
+        "title": "양정인 바보",
+        "date": "2026. 9. 24.",
+        "body": "[[사진:lk1.JPG]]\n오늘도 폰 뺏음 ㅋㅋ"
+      }
+    ]
+  }
 ];
 let activeFolder=0;
 const $=id=>document.getElementById(id);
@@ -128,64 +231,12 @@ function renderFolders(){
  if(!found)root.append(el('div','empty','검색 결과가 없습니다.'));
 }
 let smsHideTimer;
-function hideSmsBanner(){
- clearTimeout(smsHideTimer);
- const banner=$('smsBanner');banner.classList.remove('show');banner.setAttribute('aria-hidden','true');
-}
-function showSmsBanner(){
- hideSmsBanner();
- const banner=$('smsBanner');
- // 연속으로 같은 폴더를 열어도 애니메이션이 다시 시작됩니다.
- requestAnimationFrame(()=>requestAnimationFrame(()=>{
-   banner.classList.add('show');banner.setAttribute('aria-hidden','false');
-   smsHideTimer=setTimeout(hideSmsBanner,4000);
- }));
-}
+function hideSmsBanner(){clearTimeout(smsHideTimer);const banner=$('smsBanner');banner.classList.remove('show');banner.setAttribute('aria-hidden','true')}
+function showSmsBanner(){hideSmsBanner();const banner=$('smsBanner');requestAnimationFrame(()=>requestAnimationFrame(()=>{banner.classList.add('show');banner.setAttribute('aria-hidden','false');smsHideTimer=setTimeout(hideSmsBanner,4000)}))}
 function openFolder(i){activeFolder=i;$('folderTitle').textContent=DATA[i].folder;$('noteSearch').value='';renderNotes();go('listPage');if(DATA[i].folder==='민호 주요 일정')showSmsBanner();else hideSmsBanner()}
-// date 속성의 연도·월을 읽어 자동으로 묶습니다. 날짜가 없거나 형식이 다르면 '날짜 없음'으로 표시합니다.
-function noteMonth(date){
- const m=String(date||'').match(/^\s*(\d{4})\s*[.\-/]\s*(\d{1,2})(?=\s*[.\-/]|\s|$)/);
- if(!m)return {key:'unknown',label:'날짜 없음',order:-1};
- const year=Number(m[1]),month=Number(m[2]);
- if(month<1||month>12)return {key:'unknown',label:'날짜 없음',order:-1};
- return {key:year+'-'+String(month).padStart(2,'0'),label:year+'년 '+month+'월',order:year*12+month};
-}
-function renderNotes(){
- const f=DATA[activeFolder],q=$('noteSearch').value.trim().toLowerCase(),root=$('notesList');root.replaceChildren();
- const matches=f.notes.map((n,i)=>({...n,index:i})).filter(n=>(n.title+' '+n.body).toLowerCase().includes(q));
- const months=new Map();
- matches.forEach(n=>{const m=noteMonth(n.date);if(!months.has(m.key))months.set(m.key,{...m,notes:[]});months.get(m.key).notes.push(n)});
- [...months.values()].sort((a,b)=>b.order-a.order).forEach(m=>{
-   root.append(el('h2','month-heading',m.label));
-   const group=el('div','group month-group');
-   m.notes.forEach(n=>{const b=el('button','note-row');b.append(el('h2','',n.title));
-     const p=el('p');p.append(el('time','',n.date),document.createTextNode(n.body.replace(/\[\[사진:[^\]\r\n]+\]\]/g,'사진 ').replace(/\s+/g,' ').slice(0,65)));b.append(p);
-     b.onclick=()=>openNote(n.index);group.append(b)});
-   root.append(group);
- });
- if(!matches.length)root.append(el('div','empty','메모가 없습니다.'));
- $('noteCount').textContent=f.notes.length+'개의 메모';
-}
-// 본문에 [[사진:photo1.jpg]]를 적으면 그 위치에 이미지를 표시합니다.
-function renderBody(body){
- const root=$('detailBody');root.replaceChildren();
- const pattern=/\[\[사진:([^\]\r\n]+)\]\]/g;
- let start=0,match;
- while((match=pattern.exec(body))!==null){
-   if(match.index>start)root.append(el('span','note-text',body.slice(start,match.index)));
-   const filename=match[1].trim();
-   if(/^[a-zA-Z0-9가-힣_.-]+\.(png|jpe?g|webp|gif)$/i.test(filename)&&!filename.startsWith('.')){
-     const img=el('img','note-photo');img.src=encodeURIComponent(filename);img.alt='메모 사진';img.loading='lazy';
-     img.onerror=()=>{img.replaceWith(el('div','photo-error','사진을 불러올 수 없어요: '+filename))};
-     root.append(img);
-   }else{root.append(el('span','note-text',match[0]));}
-   start=pattern.lastIndex;
- }
- if(start<body.length)root.append(el('span','note-text',body.slice(start)));
-}
+function noteMonth(date){const m=String(date||'').match(/^\s*(\d{4})\s*[.\-/]\s*(\d{1,2})(?=\s*[.\-/]|\s|$)/);if(!m)return {key:'unknown',label:'날짜 없음',order:-1};const year=Number(m[1]),month=Number(m[2]);if(month<1||month>12)return {key:'unknown',label:'날짜 없음',order:-1};return {key:year+'-'+String(month).padStart(2,'0'),label:year+'년 '+month+'월',order:year*12+month}}
+function renderNotes(){const f=DATA[activeFolder],q=$('noteSearch').value.trim().toLowerCase(),root=$('notesList');root.replaceChildren();const matches=f.notes.map((n,i)=>({...n,index:i})).filter(n=>(n.title+' '+n.body).toLowerCase().includes(q));const months=new Map();matches.forEach(n=>{const m=noteMonth(n.date);if(!months.has(m.key))months.set(m.key,{...m,notes:[]});months.get(m.key).notes.push(n)});[...months.values()].sort((a,b)=>b.order-a.order).forEach(m=>{root.append(el('h2','month-heading',m.label));const group=el('div','group month-group');m.notes.forEach(n=>{const b=el('button','note-row');b.append(el('h2','',n.title));const p=el('p');p.append(el('time','',n.date),document.createTextNode(n.body.replace(/\[\[사진:[^\]\r\n]+\]\]/g,'사진 ').replace(/\s+/g,' ').slice(0,65)));b.append(p);b.onclick=()=>openNote(n.index);group.append(b)});root.append(group)});if(!matches.length)root.append(el('div','empty','메모가 없습니다.'));$('noteCount').textContent=f.notes.length+'개의 메모'}
+function renderBody(body){const root=$('detailBody');root.replaceChildren();const pattern=/\[\[사진:([^\]\r\n]+)\]\]/g;let start=0,match;while((match=pattern.exec(body))!==null){if(match.index>start)root.append(el('span','note-text',body.slice(start,match.index)));const filename=match[1].trim();if(/^[a-zA-Z0-9가-힣_.-]+\.(png|jpe?g|webp|gif)$/i.test(filename)&&!filename.startsWith('.')){const img=el('img','note-photo');img.src=encodeURIComponent(filename);img.alt='메모 사진';img.loading='lazy';img.onerror=()=>{img.replaceWith(el('div','photo-error','사진을 불러올 수 없어요: '+filename))};root.append(img)}else{root.append(el('span','note-text',match[0]))}start=pattern.lastIndex}if(start<body.length)root.append(el('span','note-text',body.slice(start)))}
 function openNote(i){const n=DATA[activeFolder].notes[i];$('detailTitle').textContent=n.title;$('detailDate').textContent=n.date;renderBody(n.body);go('detail')}
-$('folderSearch').addEventListener('input',renderFolders);
-$('noteSearch').addEventListener('input',renderNotes);
-renderFolders();
-</script>
-</body></html>
+$('folderSearch').addEventListener('input',renderFolders);$('noteSearch').addEventListener('input',renderNotes);renderFolders();
+</script></body></html>
